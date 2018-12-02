@@ -1,55 +1,45 @@
-//import * as Lanceur from './js/lanceur.js';
-
 window.onload = init;
 
 let canvas, ctx;
-let aiguilleLanceur; 
+let mousePos;
+let angle = 0;
 
+var ImagesACharger = {};
+ImagesACharger["aiguille"] = "images/aiguille.png";
 
+let aiguille = new Image();
+aiguille.src = ImagesACharger["aiguille"];
 
-document.addEventListener('keypress',  function(event){
-  	gereTouches(event);
+function init() {
+  canvas = document.querySelector("#jeu");
+  ctx = canvas.getContext("2d");
+
+  w = canvas.width = 500;
+  h = canvas.height = 500;
+
+  l = new Lanceur();
+
+  requestAnimationFrame(mainloop);
+  }
+
+function mainloop() {
+  ctx.clearRect(0, 0, w, h);
+  l.update(ctx);
+  requestAnimationFrame(mainloop);
+}
+
+document.addEventListener('keypress',  function(event) {
+    gereTouches(event);
 });
 
 
 function gereTouches(event) {
-	if(event.key == "ArrowRight") {
-		angleAiguille -= 0.1;
-		bougerAiguille(angleAiguille);
-	}else if(event.key == "ArrowLeft") {
-		angleAiguille += 0.1;
-		bougerAiguille(angleAiguille);
-	}
-	//console.log(angleAiguille);
+  if(event.key == "ArrowRight") {
+    l.changeAngle(Math.round((l.getAngle() + 0.1)*100)/100);
+  }else if(event.key == "ArrowLeft") {
+    l.changeAngle(Math.round((l.getAngle() - 0.1)*100)/100);
+ }
+ if(event.keyCode == 0) {
+   console.log("coucou");
+ }
 }
-
-
-  
-function init() {
-  
-  canvas = document.querySelector("#jeu");
-  ctx = canvas.getContext("2d");
-  
-	lanceur = new Lanceur(0);
-
-  w = canvas.width;
-  h = canvas.height;
-
-  drawLanceur(ctx);
-
-    
-  // on demarre la boucle d'animation
-  requestAnimationFrame(bouclePrincipale); //Créer la fonction
-}
-
-
-function bouclePrincipale() {
-	ctx.clearRect(0,0,canvas.width, canvas.height);
-	
-	Lanceur.drawLanceur(ctx);
-
-	requestAnimationFrame(bouclePrincipale);
-}
-
-
-

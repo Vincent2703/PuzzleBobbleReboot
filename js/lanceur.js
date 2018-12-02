@@ -1,38 +1,37 @@
-class Lanceur { 
-  constructor(angleAiguille) {
-    this.angleAiguille = angleAiguille;
+class Lanceur {
+    constructor() { 
+      this.angle = 0;
+      this.changeAngle(this.angle);
+    }
+  
+    update(ctx) {
+      this.drawAiguille(ctx);
+    }
+  
+    drawSocleLanceur(ctx) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.arc(w/2, h, 20, 0, 2 * Math.PI);
+      ctx.stroke();
+      ctx.restore();
   }
-
- drawAiguilleLanceur(ctx) {
-	ctx.save();
-    ctx.strokeStyle = "rgb(255, 0, 0)";
-    ctx.lineWidth=3;
-    ctx.beginPath();
-    //ctx.translate(10,1)
-    ctx.rotate = angleAiguille;
-    ctx.moveTo(w/2, h-h*0.12);
-    ctx.lineTo(w/2, h-h*0.035);
-    console.log(angleAiguille);
-    ctx.stroke();
-    ctx.restore();
-}
-
- drawSocleLanceur(ctx) {
-	ctx.save();
-	ctx.beginPath();
-	ctx.lineWidth = 2;
-    ctx.arc(w/2, h, 20, 0, 2 * Math.PI);
-	ctx.stroke();
-	ctx.restore();
-}
-
- drawLanceur(ctx) {
-	drawAiguilleLanceur(ctx);
-	drawSocleLanceur(ctx);
-}
-
- bougerAiguille(angle) {
-	angleAiguille = angle;	
-}
-
-}
+  
+    drawAiguille(ctx) {
+      ctx.save();
+      ctx.translate(w/2, h*0.95);
+      ctx.rotate(this.angle);
+      ctx.drawImage(aiguille,-aiguille.width/2,-aiguille.height+5);
+      //ctx.drawImage(aiguille, w/2, h*0.88);
+      ctx.restore();
+    }
+  
+    changeAngle(a) {
+        this.angle =  a;
+    }
+  
+    getAngle() {
+        return this.angle;
+    }
+  
+  }
