@@ -3,7 +3,7 @@ Inspiré du jeu SNES/PS1 : http://www.ventoline.com/frozenbubble
 
 Objectifs :
 - Lanceur (40%) --> Reste la base du lanceur + afficher la boule suivante
-- Boule (10%) --> Reste l'instanciation d'une boule, l'afficher, la faire rebondir et la faire stopper sur le haut ou sur une autre boule
+- Boule (30%) --> Reste ~~l'instanciation d'une boule,~~ l'afficher au **bon** endroit, la faire rebondir et la faire stopper sur le haut ou sur une autre boule. Mettre fonctions dans la classe Boule
 - Système de jeu (0%) --> Quand 3 boules de la même couleur se touchent --> Disparition, faire descendre les boules au bout d'un moment, système de points, game over ...
 - Graphisme (0%) --> Avoir des vrais graphismes
 - Son (0%) --> Musique, sons ...
