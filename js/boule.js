@@ -9,16 +9,28 @@ class Boule {
   draw() {
     ctx.save();
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 5, 0, 2 * Math.PI);
+    ctx.arc(this.x, this.y, 15, 0, 2 * Math.PI);
     ctx.fillStyle = this.couleur;
     ctx.fill();
     ctx.restore();
   }
 
-  dessiner() { 
-    tableauBoules.forEach((b) => {
+  dessiner() { //Pas utilisée pour le moment : dans canvas
+    for(i=0; i<tableauBoules.length; i++) {
       b.draw(ctx);
-    });
+      console.log(tableauBoules);
+    }
   }
-  //Mouvements etc
+
+  move() {
+    this.x += 1;
+    this.y += 1;
+  }
+
+  déplacer() {
+    for(i=0; i<tableauBoules.length; i++) {
+      move();
+    }
+  }
+
 }
