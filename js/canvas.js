@@ -3,6 +3,9 @@ window.onload = init;
 let canvas, ctx;
 let mousePos;
 let angle = 0;
+let idBoule = 0;
+
+let tableauBoules = [];
 
 var ImagesACharger = {};
 ImagesACharger["aiguille"] = "images/aiguille.png";
@@ -25,6 +28,9 @@ function init() {
 function mainloop() {
   ctx.clearRect(0, 0, w, h);
   l.update(ctx);
+  if(tableauBoules != null) {
+    Boule.dessiner;
+  }
   requestAnimationFrame(mainloop);
 }
 
@@ -34,12 +40,15 @@ document.addEventListener('keypress',  function(event) {
 
 
 function gereTouches(event) {
-  if(event.key == "ArrowRight") {
+  if(event.key == "ArrowRight" || event.keyCode == 39) {
     l.changeAngle(Math.round((l.getAngle() + 0.1)*100)/100);
-  }else if(event.key == "ArrowLeft") {
+  }else if(event.key == "ArrowLeft" || event.keyCode == 37) {
     l.changeAngle(Math.round((l.getAngle() - 0.1)*100)/100);
  }
- if(event.keyCode == 0) {
-   console.log("coucou");
+ if(event.key == "backspace" || event.keyCode == 0) {
+   b = new Boule(idBoule, 150, 150, "red");
+   tableauBoules.push(b);
+   idBoule++;
  }
+ console.log(tableauBoules);
 }
