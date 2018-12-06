@@ -1,8 +1,10 @@
 class Boule { 
-  constructor(id, x, y, couleur) {
+  constructor(id, x, y, vx, vy, couleur) {
     this.id = id;
     this.x = x;
     this.y = y;
+    this.vx = 1;
+    this.vy = 1
     this.couleur = couleur;
   }
 
@@ -23,14 +25,14 @@ class Boule {
   }
 
   move() {
-    this.x += 1;
-    this.y += 1;
+    this.x += this.vx;
+    this.y += this.vy;
   }
 
-  déplacer() {
-    for(i=0; i<tableauBoules.length; i++) {
+  deplacer() {
+    //for(i=0; i<tableauBoules.length; i++) {
       move();
-    }
+    //}
   }
 
 }

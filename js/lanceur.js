@@ -24,7 +24,7 @@ class Lanceur {
       ctx.drawImage(aiguille, -aiguille.width/2, -aiguille.height+5);
       ctx.restore();
     }
-  
+
     changeAngle(a) {
         this.angle =  a;
     }

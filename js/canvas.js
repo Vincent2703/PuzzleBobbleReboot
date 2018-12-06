@@ -29,9 +29,8 @@ function mainloop() {
   ctx.clearRect(0, 0, w, h);
   l.update(ctx);
   if(tableauBoules.length > 0) {
-    dessiner(); //b.[...]
-    deplacer();
-
+      dessiner(); //b.[...]
+      deplacer();
   }
   requestAnimationFrame(mainloop);
 }
@@ -42,13 +41,14 @@ function mainloop() {
 
 
 function gereTouches(event) {
-  if(event.key == "ArrowRight" || event.keyCode == 39) {
+  if(event.key == "ArrowRight" || event.key == "d" || event.keyCode == 39) {
     l.changeAngle(Math.round((l.getAngle() + 0.1)*100)/100);
-  }else if(event.key == "ArrowLeft" || event.keyCode == 37) {
+  }else if(event.key == "ArrowLeft" || event.key == "q" || event.keyCode == 37) {
     l.changeAngle(Math.round((l.getAngle() - 0.1)*100)/100);
   }
-  if(event.key == "backspace" || event.keyCode == 0) {
-    b = new Boule(idBoule, 150, 150, "red");
+  if(event.key == "b" || event.keyCode == 0) {
+    b = new Boule(idBoule, w/2+(l.getAngle()*80), h*0.82+(Math.abs(l.getAngle())*40), "red");
+    console.log(b);
     tableauBoules.push(b);
     idBoule++;
   }
@@ -58,13 +58,24 @@ function gereTouches(event) {
 /** A déplacer dans Boule plus tard **/
   function dessiner() { 
     for(i=0; i<tableauBoules.length; i++) {
-      b.draw(ctx);
-      console.log(tableauBoules);
+      tableauBoules[i].draw(ctx);
     }
   }
 
   function deplacer() {
     for(i=0; i<tableauBoules.length; i++) {
-      b.move();
+      tableauBoules[i].move();
     }
+  }
+
+  function testeCollisionAvecMurs() {    
+    tableauBoules.forEach((b) => {
+      if(((b.x + 15) > w) || (c.x - 15 < 0)) { 
+        c.vx = -c.vx;  
+      }
+    
+      if(((c.y + 15) > hc) || (c.y - 15 < 0)) {
+        b.vy = -b.vy;
+      }
+    }); 
   }
