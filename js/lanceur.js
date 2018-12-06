@@ -39,5 +39,9 @@ class Lanceur {
     changeCouleur(couleur) {
       this.couleur = couleur;
     }
+
+    getCouleur() {
+      return this.couleur;
+    }
   
   }
