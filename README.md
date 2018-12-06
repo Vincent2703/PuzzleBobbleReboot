@@ -1,9 +1,9 @@
-# PuzzleBobbleReboot
+﻿# PuzzleBobbleReboot
 Inspiré du jeu SNES/PS1 : http://www.ventoline.com/frozenbubble
 
 Objectifs :
-- Lanceur (40%) --> Reste la base du lanceur + afficher la boule suivante
-- Boule (30%) --> Reste ~~l'instanciation d'une boule,~~ l'afficher au **bon** endroit, la faire rebondir et la faire stopper sur le haut ou sur une autre boule. Mettre fonctions dans la classe Boule
+- Lanceur (60%) --> Reste la base du lanceur + afficher la boule suivante
+- Boule (90%) --> l'afficher au **bon** endroit
 - Système de jeu (0%) --> Quand 3 boules de la même couleur se touchent --> Disparition, faire descendre les boules au bout d'un moment, système de points, game over ...
 - Graphisme (0%) --> Avoir des vrais graphismes
 - Son (0%) --> Musique, sons ...
@@ -13,4 +13,3 @@ Objectifs :
 - Save --> (0%) Sauvegarder un jeu en cours
 - [...]
 
-# Objectif avant mercredi : Boule + Lanceur v1 terminés

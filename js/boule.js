@@ -1,11 +1,16 @@
 class Boule { 
-  constructor(id, x, y, vx, vy, couleur) {
+  constructor(id, x, y, couleur, angle) {
     this.id = id;
     this.x = x;
     this.y = y;
-    this.vx = 1;
-    this.vy = 1
     this.couleur = couleur;
+    this.angle = angle;
+    this.vx = 2*angle;
+    this.vy = -3+Math.abs(2*angle);
+  }
+
+  getCouleur() {
+    return this.couleur;
   }
 
   draw() {

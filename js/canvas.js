@@ -27,10 +27,14 @@ function init() {
 
 function mainloop() {
   ctx.clearRect(0, 0, w, h);
-  l.update(ctx);
+  l.update(ctx, l.getCouleur);
+
+
   if(tableauBoules.length > 0) {
       dessiner(); //b.[...]
       deplacer();
+      testCollisionCoteLat();
+      testCollisionCercles();
   }
   requestAnimationFrame(mainloop);
 }
@@ -47,12 +51,31 @@ function gereTouches(event) {
     l.changeAngle(Math.round((l.getAngle() - 0.1)*100)/100);
   }
   if(event.key == "b" || event.keyCode == 0) {
-    b = new Boule(idBoule, w/2+(l.getAngle()*80), h*0.82+(Math.abs(l.getAngle())*40), "red");
-    console.log(b);
+    var couleur = setBouleSuivanteCouleur();
+    b = new Boule(idBoule, w/2+(l.getAngle()*80), h*0.88+(Math.abs(l.getAngle())*40), couleur, l.getAngle());
+    l.changeCouleur(couleur);
     tableauBoules.push(b);
     idBoule++;
   }
 }
+
+  function setBouleSuivanteCouleur() {
+    var alea = Math.random();
+    var couleur;
+    if(alea<=0.2) {
+      couleur = "red";
+    }else if(alea<=0.4) {
+      couleur = "blue";
+    }else if(alea<=0.6) {
+      couleur = "green";
+    }else if(alea<=0.8) {
+      couleur = "yellow";
+    }else{
+      couleur = "purple";
+    }
+    console.log(alea);
+    return couleur;
+  }
 
 
 /** A déplacer dans Boule plus tard **/
@@ -68,14 +91,30 @@ function gereTouches(event) {
     }
   }
 
-  function testeCollisionAvecMurs() {    
+  function testCollisionCoteLat() {    
     tableauBoules.forEach((b) => {
-      if(((b.x + 15) > w) || (c.x - 15 < 0)) { 
-        c.vx = -c.vx;  
+      if(((b.x + 15) > w) || (b.x - 15 < 0)) { 
+        b.vx = -b.vx;  
       }
     
-      if(((c.y + 15) > hc) || (c.y - 15 < 0)) {
-        b.vy = -b.vy;
+      if(b.y - 15 < 0) {
+        b.vy = 0;
+        b.vx = 0;
       }
     }); 
+  }
+
+  function testCollisionCercles(){
+    tableauBoules.forEach((b) => {
+      tableauBoules.forEach((b2) => {
+        var dx = b.x - b2.x;
+        var dy = b.y - b2.y;
+        var distance = Math.sqrt(dx * dx + dy * dy);
+        if(distance < 30 && b.id !== b2.id){
+          b.vx = 0;
+          b.vy = 0;
+          console.log("coucou");
+        }
+      });
+    });
   }

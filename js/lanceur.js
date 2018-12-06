@@ -8,15 +8,18 @@ class Lanceur {
       this.drawAiguille(ctx);
     }
   
-    drawSocleLanceur(ctx) {
+    drawSocleLanceur(ctx, couleur) {
       ctx.save();
       ctx.beginPath();
       ctx.lineWidth = 2;
-      ctx.arc(w/2, h, 20, 0, 2 * Math.PI);
+      ctx.arc(w/2, h, 30, 0, 2 * Math.PI);
+      ctx.fillStyle = couleur;
+      ctx.fill();
       ctx.stroke();
       ctx.restore();
     }
   
+
     drawAiguille(ctx) {
       ctx.save();
       ctx.translate(w/2, h*0.95);
@@ -31,6 +34,10 @@ class Lanceur {
   
     getAngle() {
         return this.angle;
+    }
+
+    changeCouleur(couleur) {
+      this.couleur = couleur;
     }
   
   }
