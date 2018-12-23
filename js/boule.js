@@ -5,8 +5,8 @@ class Boule {
     this.y = y;
     this.couleur = couleur;
     this.angle = angle;
-    this.vx = 2*angle;
-    this.vy = -3+Math.abs(2*angle);
+    this.vx = 10*angle;
+    this.vy = -10+Math.abs(angle);
   }
 
   getCouleur() {
@@ -16,7 +16,7 @@ class Boule {
   draw() {
     ctx.save();
     ctx.beginPath();
-    ctx.arc(this.x, this.y, 15, 0, 2 * Math.PI);
+    ctx.arc(this.x, this.y, 17, 0, 2 * Math.PI);
     ctx.fillStyle = this.couleur;
     ctx.fill();
     ctx.restore();

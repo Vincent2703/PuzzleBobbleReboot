@@ -45,8 +45,8 @@ function mainloop() {
   requestAnimationFrame(mainloop);
 }
 
-  document.addEventListener('keypress',  function(event) {
-      gereTouches("press", event);
+  document.addEventListener('keydown',  function(event) {
+      gereTouches("down", event);
   });
 
 
@@ -59,7 +59,7 @@ function gereTouches(type, event) {
     }
   if(event.key == "b" || event.keyCode == 0) {
     couleur = setBouleSuivanteCouleur();
-    b = new Boule(idBoule, w/2+(l.getAngle()*80), h*0.88+(Math.abs(l.getAngle())*40), couleur, l.getAngle());
+    b = new Boule(idBoule, w/2+(10*l.getAngle()), h*0.88, couleur, l.getAngle());
     l.changeCouleur(couleur);
     console.log(couleur);
     tableauBoules.push(b);
@@ -100,11 +100,10 @@ function gereTouches(type, event) {
 
   function testCollisionCoteLat() {    
     tableauBoules.forEach((b) => {
-      if(((b.x + 15) > w) || (b.x - 15 < 0)) { 
+      if(((b.x + 17) > w) || (b.x - 17 < 0)) { 
         b.vx = -b.vx;  
-      }
-    
-      if(b.y - 15 < 0) {
+      } 
+      if(b.y - 17 < 0) {
         b.vy = 0;
         b.vx = 0;
       }
@@ -117,7 +116,7 @@ function gereTouches(type, event) {
         var dx = b.x - b2.x;
         var dy = b.y - b2.y;
         var distance = Math.sqrt(dx * dx + dy * dy);
-        if(distance < 30 && b.id !== b2.id){
+        if(distance < 32 && b.id !== b2.id){
           b.vx = 0;
           b.vy = 0;
         }
