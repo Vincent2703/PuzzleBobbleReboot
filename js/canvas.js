@@ -7,6 +7,8 @@ let idBoule = 0;
 
 let tableauBoules = [];
 
+let tableauBoulesCollisions = [];
+
 var ImagesACharger = {};
 ImagesACharger["aiguille"] = "images/aiguille.png";
 
@@ -17,7 +19,7 @@ function init() {
   canvas = document.querySelector("#jeu");
   ctx = canvas.getContext("2d");
 
-  w = canvas.width = 500;
+  w = canvas.width = 300;
   h = canvas.height = 500;
 
   l = new Lanceur();
@@ -49,9 +51,30 @@ function mainloop() {
       gereTouches("down", event);
   });
 
+  document.addEventListener('mousemove', function(event) {
+  	var sourisPos = getSourisPos(canvas, event);
+  	if(sourisPos.x >= 0 && sourisPos.x <= w) {
+  		l.angle = -(1-sourisPos.x/(w/2));
+  	}
+  });
+
+  document.addEventListener('click', function(event) {
+  	couleur = setBouleSuivanteCouleur();
+    b = new Boule(idBoule, w/2+(25*l.getAngle()), h*0.88, couleur, l.getAngle());
+    l.changeCouleur(couleur);
+    tableauBoules.push(b);
+    idBoule++;
+  });
+
+  function getSourisPos(canvas, event) {
+  	var rect = canvas.getBoundingClientRect();
+  	return {
+  		x : event.clientX - rect.left,
+  		y : event.clientY - rect.top
+  	};
+  }
 
 function gereTouches(type, event) {
-  console.log(l.getAngle());
     if(l.getAngle() <= 1.3 && (event.key == "ArrowRight" || event.key == "d" || event.keyCode == 39)) {
       l.changeAngle(Math.round((l.getAngle() + 0.1)*100)/100);
     }else if(l.getAngle() >= - 1.3 && (event.key == "ArrowLeft" || event.key == "q" || event.keyCode == 37)) {
@@ -61,7 +84,6 @@ function gereTouches(type, event) {
     couleur = setBouleSuivanteCouleur();
     b = new Boule(idBoule, w/2+(10*l.getAngle()), h*0.88, couleur, l.getAngle());
     l.changeCouleur(couleur);
-    console.log(couleur);
     tableauBoules.push(b);
     idBoule++;
   }
@@ -116,10 +138,21 @@ function gereTouches(type, event) {
         var dx = b.x - b2.x;
         var dy = b.y - b2.y;
         var distance = Math.sqrt(dx * dx + dy * dy);
-        if(distance < 32 && b.id !== b2.id){
+        if(distance <= 36 && b.id !== b2.id){
           b.vx = 0;
           b.vy = 0;
+          var tab2Boules;
+          if(b.couleur == b2.couleur) {
+          	if(b.id < b2.id) {
+          		tab2Boules = [b.id, b2.id];
+          		if(tableauBoulesCollisions.indexOf(tab2Boules) == -1) {
+          			tableauBoulesCollisions.push(tab2Boules);
+          			console.log(tableauBoulesCollisions);
+          		}
+          	}
+      	  }
         }
       });
     });
+
   }
