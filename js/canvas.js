@@ -4,6 +4,7 @@ let canvas, ctx;
 let mousePos;
 let angle = 0;
 let idBoule = 0;
+let idCol = 0;
 
 let tableauBoules = [];
 
@@ -110,18 +111,23 @@ function gereTouches(type, event) {
 /** A déplacer dans Boule plus tard **/
   function dessiner() { 
     for(i=0; i<tableauBoules.length; i++) {
-      tableauBoules[i].draw(ctx);
+    	if(tableauBoules[i].active == 1) {
+      		tableauBoules[i].draw(ctx);
+  		}
     }
   }
 
   function deplacer() {
     for(i=0; i<tableauBoules.length; i++) {
-      tableauBoules[i].move();
+   		if(tableauBoules[i].active == 1) {
+      		tableauBoules[i].move();
+  		}
     }
   }
 
   function testCollisionCoteLat() {    
     tableauBoules.forEach((b) => {
+    if(b.active == 1) {
       if(((b.x + 17) > w) || (b.x - 17 < 0)) { 
         b.vx = -b.vx;  
       } 
@@ -129,7 +135,9 @@ function gereTouches(type, event) {
         b.vy = 0;
         b.vx = 0;
       }
+  }
     }); 
+
   }
 
   function testCollisionCercles(){
@@ -138,21 +146,37 @@ function gereTouches(type, event) {
         var dx = b.x - b2.x;
         var dy = b.y - b2.y;
         var distance = Math.sqrt(dx * dx + dy * dy);
-        if(distance <= 36 && b.id !== b2.id){
+        if(distance <= 36 && b.id !== b2.id && b.active == 1 && b2.active == 1){
           b.vx = 0;
           b.vy = 0;
-          var tab2Boules;
-          if(b.couleur == b2.couleur) {
-          	if(b.id < b2.id) {
-          		tab2Boules = [b.id, b2.id];
-          		if(tableauBoulesCollisions.indexOf(tab2Boules) == -1) {
-          			tableauBoulesCollisions.push(tab2Boules);
-          			console.log(tableauBoulesCollisions);
-          		}
-          	}
-      	  }
+          boulesACote(b);
         }
       });
     });
+
+    function boulesACote(b) {
+    	var tabBoulesACote = [];
+    	tableauBoules.forEach((b2) => {
+    		if(b2.id != b.id && b2.couleur == b.couleur) {
+    			var dx = b.x - b2.x;
+        		var dy = b.y - b2.y;
+		        var distance = Math.sqrt(dx * dx + dy * dy);
+		        if(distance <= 36) {
+		        	tabBoulesACote.push(b2);
+		        	if(tabBoulesACote.length == 2) { 
+		        		disparaitreBoule(tabBoulesACote[0]);
+		        		disparaitreBoule(b);
+		        		disparaitreBoule(tabBoulesACote[1]);
+		        	}
+		        }
+    		}
+    	});
+    }
+
+    function disparaitreBoule(b) {
+    	b.active = 0;
+    	//b.x = 0;
+    	//b.y = 0;
+    }
 
   }

@@ -1,5 +1,5 @@
 class Boule { 
-  constructor(id, x, y, couleur, angle) {
+  constructor(id, x, y, couleur, angle, active) {
     this.id = id;
     this.x = x;
     this.y = y;
@@ -7,6 +7,7 @@ class Boule {
     this.angle = angle;
     this.vx = 10*angle;
     this.vy = -10+Math.abs(angle);
+    this.active = 1;
   }
 
   getCouleur() {
