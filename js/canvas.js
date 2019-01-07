@@ -5,6 +5,7 @@ let mousePos;
 let angle = 0;
 let idBoule = 0;
 let prochaineCouleur = setBouleSuivanteCouleur();
+let score = 0;
 
 let tableauBoules = [];
 
@@ -25,7 +26,7 @@ function init() {
 
   l = new Lanceur();
 
-  //let couleurSuivante = null;
+  //let prochaineCouleur = null;
 
   requestAnimationFrame(mainloop);
   }
@@ -33,7 +34,7 @@ function init() {
 function mainloop() {
   ctx.clearRect(0, 0, w, h);
   l.update(ctx, l.getCouleur);
-  //if(couleurSuivante == null) {
+  //if(prochaineCouleur == null) {
    // l.drawSocleLanceur(ctx, "pink");
   //}else{
     l.drawSocleLanceur(ctx, prochaineCouleur);
@@ -46,11 +47,9 @@ function mainloop() {
       testCollisionCercles();
   }
   requestAnimationFrame(mainloop);
+  document.getElementById("score").innerHTML = "Score : " + score/3;
 }
 
-  document.addEventListener('keydown',  function(event) {
-      gereTouches("down", event);
-  });
 
   document.addEventListener('mousemove', function(event) {
   	var sourisPos = getSourisPos(canvas, event);
@@ -75,20 +74,6 @@ function mainloop() {
   	};
   }
 
-function gereTouches(type, event) {
-    if(l.getAngle() <= 1.3 && (event.key == "ArrowRight" || event.key == "d" || event.keyCode == 39)) {
-      l.changeAngle(Math.round((l.getAngle() + 0.1)*100)/100);
-    }else if(l.getAngle() >= - 1.3 && (event.key == "ArrowLeft" || event.key == "q" || event.keyCode == 37)) {
-      l.changeAngle(Math.round((l.getAngle() - 0.1)*100)/100);
-    }
-  if(event.key == "b" || event.keyCode == 0) {
-    couleur = setBouleSuivanteCouleur();
-    b = new Boule(idBoule, w/2+(10*l.getAngle()), h*0.88, couleur, l.getAngle());
-    l.changeCouleur(couleur);
-    tableauBoules.push(b);
-    idBoule++;
-  }
-}
 
   function setBouleSuivanteCouleur() {
     var alea = Math.random();
@@ -175,6 +160,7 @@ function gereTouches(type, event) {
 
     function disparaitreBoule(b) {
     	b.active = 0;
+    	score++;
     	//b.x = 0;
     	//b.y = 0;
     }
