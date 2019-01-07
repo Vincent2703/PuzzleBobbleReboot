@@ -4,7 +4,7 @@ let canvas, ctx;
 let mousePos;
 let angle = 0;
 let idBoule = 0;
-let idCol = 0;
+let prochaineCouleur = setBouleSuivanteCouleur();
 
 let tableauBoules = [];
 
@@ -36,7 +36,7 @@ function mainloop() {
   //if(couleurSuivante == null) {
    // l.drawSocleLanceur(ctx, "pink");
   //}else{
-    l.drawSocleLanceur(ctx, "pink");
+    l.drawSocleLanceur(ctx, prochaineCouleur);
   //}
 
   if(tableauBoules.length > 0) {
@@ -60,9 +60,9 @@ function mainloop() {
   });
 
   document.addEventListener('click', function(event) {
-  	couleur = setBouleSuivanteCouleur();
-    b = new Boule(idBoule, w/2+(25*l.getAngle()), h*0.88, couleur, l.getAngle());
-    l.changeCouleur(couleur);
+    b = new Boule(idBoule, w/2+(25*l.getAngle()), h*0.88, prochaineCouleur, l.getAngle());
+    l.changeCouleur(prochaineCouleur);
+    prochaineCouleur = setBouleSuivanteCouleur();
     tableauBoules.push(b);
     idBoule++;
   });
