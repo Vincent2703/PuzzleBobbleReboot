@@ -18,20 +18,30 @@ var ImagesACharger = {};
 ImagesACharger["aiguille"] = "images/aiguille.png";
 ImagesACharger["aiguilleBonus"] = "images/aiguilleBonus.png";
 
-
 let aiguille = new Image();
 aiguille.src = ImagesACharger["aiguille"];
+
+var sonsACharger = {};
+sonsACharger["tire"] = "sons/tire.wav";
+sonsACharger["bonus"] = "sons/bonus.wav";
+sonsACharger["termine"] = "sons/termine.wav";
+sonsACharger["touche"] = "sons/touche.wav";
+sonsACharger["disparition"] = "sons/disparition.wav";
+
+
+
+let sonTire = new Audio(sonsACharger["tire"]);
+let sonBonus = new Audio(sonsACharger["bonus"]);
+let sonTermine = new Audio(sonsACharger["termine"]);
+let sonTouche = new Audio(sonsACharger["touche"]);
+let sonDisparition = new Audio(sonsACharger["disparition"]);
+
 
 function init() {
   canvas = document.querySelector("#jeu");
   ctx = canvas.getContext("2d");
   w = canvas.width = 300;
   h = canvas.height = 500;
-  var menu = 0;
-  while(menu != 1000) {
-  	document.getElementById("temps").innerHTML = "COUCOU";
-    menu++;
-  }
 
   l = new Lanceur();
   requestAnimationFrame(mainloop);
@@ -64,9 +74,11 @@ function init() {
   if(temps > 0 && barre == 0) {
   	requestAnimationFrame(mainloop);
   }else if(temps == 0) {
+  	sonTermine.play();
   	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
   	document.getElementById("temps").innerHTML ="<h3>Temps écoulé !</h3>";
   }else if(barre == 1) {
+  	sonTouche.play();
   	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
 	document.getElementById("temps").innerHTML = "<h3>Vous avez franchi la <b style='color: red'>limite</b> !</h3>";
   }
@@ -81,6 +93,7 @@ function init() {
   });
 
   document.addEventListener('click', function(event) {
+    sonTire.play();
     b = new Boule(idBoule, w/2+(25*l.getAngle()), h*0.88, prochaineCouleur, l.getAngle());
     l.changeCouleur(prochaineCouleur);
     prochaineCouleur = setBouleSuivanteCouleur();
@@ -191,11 +204,13 @@ function init() {
 		        if(distance <= 33) {
 		        	tabBoulesACote.push(b2);
 		        	if(tabBoulesACote.length == 2) { 
+		        		sonDisparition.play();
 		        		disparaitreBoule(tabBoulesACote[0]);
 		        		disparaitreBoule(b);
 		        		disparaitreBoule(tabBoulesACote[1]);
 		        		aiguille.src = ImagesACharger["aiguilleBonus"];
 		        		tempsBonus = 300; //5 secondes
+		        		sonBonus.play();
 		        	}
 		        }
     		}

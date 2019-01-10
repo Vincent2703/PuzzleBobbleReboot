@@ -1,7 +1,8 @@
 #jeu {
     display: block;
     border: 3px solid;
-    background-color: lightgrey;
+    /*background-color: lightgrey;*/
+    background: url("../images/decor-V.gif");
     margin: auto;
 } 
 
