@@ -118,7 +118,7 @@ function init() {
     }else if(alea<=0.4) {
       couleur = "blue";
     }else if(alea<=0.6) {
-      couleur = "green";
+      couleur = "orange";
     }else if(alea<=0.8) {
       couleur = "yellow";
     }else{

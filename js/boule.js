@@ -16,9 +16,28 @@ class Boule {
 
   draw() {
     ctx.save();
+    let boulePat = new Image();
+    switch(this.couleur) {
+      case "red":
+        boulePat.src = "images/red.png";
+        break;
+      case "green":
+        boulePat.src = "images/green.png";
+        break;
+      case "orange":
+        boulePat.src = "images/orange.png";
+        break;
+      case "yellow":
+        boulePat.src = "images/yellow.png";
+        break; 
+      case "purple":
+        boulePat.src = "images/purple.png";
+        break;
+    }
+    var pattern = ctx.createPattern(boulePat, "repeat");
     ctx.beginPath();
     ctx.arc(this.x, this.y, 15, 0, 2 * Math.PI);
-    ctx.fillStyle = this.couleur;
+    ctx.fillStyle = pattern;
     ctx.fill();
     ctx.restore();
   }
