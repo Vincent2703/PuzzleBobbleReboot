@@ -4,15 +4,20 @@ let canvas, ctx;
 let mousePos;
 let angle = 0;
 let idBoule = 0;
-let prochaineCouleur = setBouleSuivanteCouleur();
 let score = 0;
+let temps = 45;
+temps = temps*60;
+let barre = 0;
+let tempsBonus = 0;
+let prochaineCouleur = setBouleSuivanteCouleur();
 
 let tableauBoules = [];
-
 let tableauBoulesCollisions = [];
 
 var ImagesACharger = {};
 ImagesACharger["aiguille"] = "images/aiguille.png";
+ImagesACharger["aiguilleBonus"] = "images/aiguilleBonus.png";
+
 
 let aiguille = new Image();
 aiguille.src = ImagesACharger["aiguille"];
@@ -20,34 +25,51 @@ aiguille.src = ImagesACharger["aiguille"];
 function init() {
   canvas = document.querySelector("#jeu");
   ctx = canvas.getContext("2d");
-
   w = canvas.width = 300;
   h = canvas.height = 500;
+  var menu = 0;
+  while(menu != 1000) {
+  	document.getElementById("temps").innerHTML = "COUCOU";
+    menu++;
+  }
 
   l = new Lanceur();
-
-  //let prochaineCouleur = null;
-
   requestAnimationFrame(mainloop);
   }
 
-function mainloop() {
-  ctx.clearRect(0, 0, w, h);
-  l.update(ctx, l.getCouleur);
-  //if(prochaineCouleur == null) {
-   // l.drawSocleLanceur(ctx, "pink");
-  //}else{
-    l.drawSocleLanceur(ctx, prochaineCouleur);
-  //}
+
+  function mainloop() {
+  	dessinerBarreHoriz();
+  	l.update(ctx, l.getCouleur);
+  	l.drawSocleLanceur(ctx, prochaineCouleur);
+
 
   if(tableauBoules.length > 0) {
       dessiner(); //b.[...]
       deplacer();
-      testCollisionCoteLat();
+      testCollisionCoteLat(b);
       testCollisionCercles();
+      testCollisionBarre();
   }
-  requestAnimationFrame(mainloop);
   document.getElementById("score").innerHTML = "Score : " + score/3;
+  document.getElementById("temps").innerHTML = "Il reste " + Math.round(temps/60) + "s";
+  temps--;
+  if(aiguille.src != ImagesACharger["aiguille"]) {
+
+  	tempsBonus--;
+  	if(tempsBonus == 0) {
+  		aiguille.src = ImagesACharger["aiguille"];
+  	}
+  }
+  if(temps > 0 && barre == 0) {
+  	requestAnimationFrame(mainloop);
+  }else if(temps == 0) {
+  	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
+  	document.getElementById("temps").innerHTML ="<h3>Temps écoulé !</h3>";
+  }else if(barre == 1) {
+  	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
+	document.getElementById("temps").innerHTML = "<h3>Vous avez franchi la <b style='color: red'>limite</b> !</h3>";
+  }
 }
 
 
@@ -92,11 +114,29 @@ function mainloop() {
     return couleur;
   }
 
+  function dessinerBarreHoriz() {
+	  ctx.clearRect(0, 0, w, h);
+	  ctx.save();
+	  ctx.fillStyle = "#FF0000";
+	  ctx.fillRect(0, h*0.5, w, 5);
+	  ctx.restore()
+  }
+
+  function testCollisionBarre() {
+	tableauBoules.forEach((b) => {
+		if(b.etat == 2) {
+	        if(b.y > h/2){
+	        	barre = 1;
+	        }
+		}
+	});
+  }
+
 
 /** A déplacer dans Boule plus tard **/
   function dessiner() { 
     for(i=0; i<tableauBoules.length; i++) {
-    	if(tableauBoules[i].active == 1) {
+    	if(tableauBoules[i].etat != 0) {
       		tableauBoules[i].draw(ctx);
   		}
     }
@@ -104,21 +144,22 @@ function mainloop() {
 
   function deplacer() {
     for(i=0; i<tableauBoules.length; i++) {
-   		if(tableauBoules[i].active == 1) {
+   		if(tableauBoules[i].etat != 0) {
       		tableauBoules[i].move();
   		}
     }
   }
 
-  function testCollisionCoteLat() {    
-    tableauBoules.forEach((b) => {
-    if(b.active == 1) {
-      if(((b.x + 17) > w) || (b.x - 17 < 0)) { 
-        b.vx = -b.vx;  
+  function testCollisionCoteLat(b) {    
+    tableauBoules.forEach((b) => { //Obliger de vérifier pour chaque sinon ça marche pas des fois, pourquoi ?
+    if(b.etat != 0) {
+      if(((b.x + 15) > w) || (b.x - 15 < 0)) { 
+        b.vx = -b.vx;
       } 
-      if(b.y - 17 < 0) {
+      if(b.y - 15 < 0) {
         b.vy = 0;
         b.vx = 0;
+        b.etat = 2;
       }
   }
     }); 
@@ -131,9 +172,10 @@ function mainloop() {
         var dx = b.x - b2.x;
         var dy = b.y - b2.y;
         var distance = Math.sqrt(dx * dx + dy * dy);
-        if(distance <= 36 && b.id !== b2.id && b.active == 1 && b2.active == 1){
+        if(distance <= 30 && b.id !== b2.id && b.etat != 0 && b2.etat != 0){
           b.vx = 0;
           b.vy = 0;
+          b.etat = 2;
           boulesACote(b);
         }
       });
@@ -146,12 +188,14 @@ function mainloop() {
     			var dx = b.x - b2.x;
         		var dy = b.y - b2.y;
 		        var distance = Math.sqrt(dx * dx + dy * dy);
-		        if(distance <= 36) {
+		        if(distance <= 33) {
 		        	tabBoulesACote.push(b2);
 		        	if(tabBoulesACote.length == 2) { 
 		        		disparaitreBoule(tabBoulesACote[0]);
 		        		disparaitreBoule(b);
 		        		disparaitreBoule(tabBoulesACote[1]);
+		        		aiguille.src = ImagesACharger["aiguilleBonus"];
+		        		tempsBonus = 300; //5 secondes
 		        	}
 		        }
     		}
@@ -159,10 +203,10 @@ function mainloop() {
     }
 
     function disparaitreBoule(b) {
-    	b.active = 0;
+    	b.etat = 0;
     	score++;
-    	//b.x = 0;
-    	//b.y = 0;
+    	b.x = 1000;
+    	b.y = 1000;
     }
 
   }
