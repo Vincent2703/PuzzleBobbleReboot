@@ -16,7 +16,7 @@ class Boule {
 
   draw() {
     ctx.save();
-    /*switch(this.couleur) {
+    switch(this.couleur) {
       case "red":
         boule.src = ImagesBoulesACharger["rouge"];
         break;
@@ -34,13 +34,13 @@ class Boule {
         break;
     }
 
-    ctx.drawImage(boule, this.x-15, this.y-15);*/
+    ctx.drawImage(boule, this.x-15, this.y-15);
     
     
-    ctx.fillStyle = this.couleur; //A enlever si image
+    //ctx.fillStyle = this.couleur; //A enlever si image
     ctx.beginPath();
     ctx.arc(this.x, this.y, 15, 0, 2 * Math.PI);
-    ctx.fill();
+    //ctx.fill();
     ctx.restore();
 
   }
