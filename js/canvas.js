@@ -10,6 +10,7 @@ temps = temps*60;
 let barre = 0;
 let tempsBonus = 0;
 let prochaineCouleur = setBouleSuivanteCouleur();
+let pause = 1;
 
 let tableauBoules = [];
 let tableauBoulesCollisions = [];
@@ -17,6 +18,15 @@ let tableauBoulesCollisions = [];
 var ImagesACharger = {};
 ImagesACharger["aiguille"] = "images/aiguille.png";
 ImagesACharger["aiguilleBonus"] = "images/aiguilleBonus.png";
+
+var ImagesBoulesACharger = {};
+ImagesBoulesACharger["rouge"] ="images/red.png";
+ImagesBoulesACharger["vert"] = "images/green.png";
+ImagesBoulesACharger["orange"] = "images/orange.png";
+ImagesBoulesACharger["jaune"] = "images/yellow.png";
+ImagesBoulesACharger["violet"]= "images/purple.png";
+let boule = new Image();
+
 
 let aiguille = new Image();
 aiguille.src = ImagesACharger["aiguille"];
@@ -42,9 +52,8 @@ function init() {
   ctx = canvas.getContext("2d");
   w = canvas.width = 300;
   h = canvas.height = 500;
-
   l = new Lanceur();
-  requestAnimationFrame(mainloop);
+  	requestAnimationFrame(mainloop);
   }
 
 
@@ -53,35 +62,42 @@ function init() {
   	l.update(ctx, l.getCouleur);
   	l.drawSocleLanceur(ctx, prochaineCouleur);
 
+  if(pause == 0) {
+	  if(tableauBoules.length > 0) {
+	      dessiner(); //b.[...]
+	      deplacer();
+	      testCollisionCoteLat(b);
+	      testCollisionCercles();
+	      testCollisionBarre();
+	  }
+	  document.getElementById("score").innerHTML = "Score : " + score/3;
+	  document.getElementById("temps").innerHTML = "Il reste " + Math.round(temps/60) + "s";
+	  temps--;
+	  if(aiguille.src != ImagesACharger["aiguille"]) {
 
-  if(tableauBoules.length > 0) {
-      dessiner(); //b.[...]
-      deplacer();
-      testCollisionCoteLat(b);
-      testCollisionCercles();
-      testCollisionBarre();
-  }
-  document.getElementById("score").innerHTML = "Score : " + score/3;
-  document.getElementById("temps").innerHTML = "Il reste " + Math.round(temps/60) + "s";
-  temps--;
-  if(aiguille.src != ImagesACharger["aiguille"]) {
+	  	tempsBonus--;
+	  	if(tempsBonus == 0) {
+	  		aiguille.src = ImagesACharger["aiguille"];
+	  	}
+	  }
+	}else{
+		getScore()
 
-  	tempsBonus--;
-  	if(tempsBonus == 0) {
-  		aiguille.src = ImagesACharger["aiguille"];
-  	}
-  }
-  if(temps > 0 && barre == 0) {
-  	requestAnimationFrame(mainloop);
-  }else if(temps == 0) {
-  	sonTermine.play();
-  	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
-  	document.getElementById("temps").innerHTML ="<h3>Temps écoulé !</h3>";
-  }else if(barre == 1) {
-  	sonTouche.play();
-  	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
-	document.getElementById("temps").innerHTML = "<h3>Vous avez franchi la <b style='color: red'>limite</b> !</h3>";
-  }
+		document.getElementById("score").innerHTML = "<h3>Le jeu est en <b>PAUSE</b></h3>";
+	}
+
+	  if(temps > 0 && barre == 0) {
+	  	requestAnimationFrame(mainloop);
+	  }else if(temps == 0) {
+	  	sonTermine.play();
+	  	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
+	  	document.getElementById("temps").innerHTML ="<h3>Temps écoulé !</h3>";
+	  }else if(barre == 1) {
+	  	sonTouche.play();
+	  	document.getElementById("score").innerHTML = "<h3>Vous avez un score total de " + score/3 + "</h3>";
+		document.getElementById("temps").innerHTML = "<h3>Vous avez franchi la <b style='color: red'>limite</b> !</h3>";
+	  }
+	
 }
 
 
@@ -93,13 +109,25 @@ function init() {
   });
 
   document.addEventListener('click', function(event) {
-    sonTire.play();
-    b = new Boule(idBoule, w/2+(25*l.getAngle()), h*0.88, prochaineCouleur, l.getAngle());
-    l.changeCouleur(prochaineCouleur);
-    prochaineCouleur = setBouleSuivanteCouleur();
-    tableauBoules.push(b);
-    idBoule++;
-  });
+  	if(pause == 0) {
+	    sonTire.play();
+	    b = new Boule(idBoule, w/2+(25*l.getAngle()), h*0.88, prochaineCouleur, l.getAngle());
+	    l.changeCouleur(prochaineCouleur);
+	    prochaineCouleur = setBouleSuivanteCouleur();
+	    tableauBoules.push(b);
+	    idBoule++;
+	}
+ });
+
+  document.addEventListener('keydown', function(event) {
+        if(event.keyCode == 80) {
+       		if(pause == 0) {
+       			pause = 1;
+       		}else{
+       			pause = 0;
+       		}
+        }
+    }, false);
 
   function getSourisPos(canvas, event) {
   	var rect = canvas.getBoundingClientRect();
@@ -225,3 +253,22 @@ function init() {
     }
 
   }
+
+  function getScore() {
+  //if (event.button<=1) {
+   try{
+      xmlhttp=new XMLHttpRequest();   
+      xmlhttp.onreadystatechange=function() {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200) {
+          return score = xmlhttp.responseText;
+          console.log("score");
+        }
+      }
+      xmlhttp.open("GET","getScore.php", true);
+      xmlhttp.send();
+   } finally {
+    //event.stopPropagation();
+    //event.preventDefault();
+   }
+  //}
+}

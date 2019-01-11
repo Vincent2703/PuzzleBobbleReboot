@@ -16,30 +16,33 @@ class Boule {
 
   draw() {
     ctx.save();
-    let boulePat = new Image();
-    switch(this.couleur) {
+    /*switch(this.couleur) {
       case "red":
-        boulePat.src = "images/red.png";
+        boule.src = ImagesBoulesACharger["rouge"];
         break;
       case "green":
-        boulePat.src = "images/green.png";
+        boule.src = ImagesBoulesACharger["vert"];
         break;
       case "orange":
-        boulePat.src = "images/orange.png";
+        boule.src = ImagesBoulesACharger["orange"];
         break;
       case "yellow":
-        boulePat.src = "images/yellow.png";
+        boule.src = ImagesBoulesACharger["jaune"];
         break; 
       case "purple":
-        boulePat.src = "images/purple.png";
+        boule.src = ImagesBoulesACharger["violet"];
         break;
     }
-    var pattern = ctx.createPattern(boulePat, "repeat");
+
+    ctx.drawImage(boule, this.x-15, this.y-15);*/
+    
+    
+    ctx.fillStyle = this.couleur; //A enlever si image
     ctx.beginPath();
     ctx.arc(this.x, this.y, 15, 0, 2 * Math.PI);
-    ctx.fillStyle = pattern;
     ctx.fill();
     ctx.restore();
+
   }
 
 
